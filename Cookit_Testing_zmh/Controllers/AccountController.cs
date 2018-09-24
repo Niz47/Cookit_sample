@@ -155,6 +155,12 @@ namespace Cookit_Testing_zmh.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // to save user object to user_list when user is register
+                    user_list u = new user_list { user_email = model.Email, username = model.Email };
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    db.user_list.Add(u);
+                    db.SaveChanges();
+                    
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
