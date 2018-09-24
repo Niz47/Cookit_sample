@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Cookit_Testing_zmh.Models.recipe>
+﻿@model IEnumerable<Cookit_Testing_zmh.Models.FavouriteRecipeVM>
 
 @{
     ViewBag.Title = "Index";
@@ -23,23 +23,62 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImageName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImagePath)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.recipe_name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.recipe_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.recipe_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.recipe_id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImagePath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.recipe_name)
+            </td>
+            <td>
+                @{string checkvalue = (item.favourite) ? "checked" : "";}
+                <input type="checkbox" id="@item.recipe_id" name="@item.recipe_id" class="favorite" @checkvalue />
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.recipe_id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.recipe_id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.recipe_id })
+            </td>
+        </tr>
+    }
 
 </table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+
+        $(function () {
+
+            $('.favorite').change(function () {
+                var recipeid = $(this).attr('id');
+                var ischecked = $(this).is(':checked');
+                var action = (!ischecked) ? "remove" : "add";
+
+                //alert(action);
+                //alert('changed >> ' + listid);
+
+                $.ajax({
+                    url: "@Url.Action("Favorite")",
+                    type: "POST",
+                    data: { recipeid: recipeid, action: action },
+                    error: function (response) {
+                        alert(json.stringify(jsonObject));
+                    },
+                    success: function (response) {
+                        if (response == "Invalid User!") alert("Please Login First!");
+                        console.log(response);
+                    }
+                });
+
+            });
+        });
+    </script>
+}

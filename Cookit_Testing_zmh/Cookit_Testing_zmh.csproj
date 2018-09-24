@@ -207,6 +207,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\calorie.cs" />
+    <Compile Include="Models\FavouriteRecipeVM.cs" />
     <Compile Include="Models\fav_recipe.cs" />
     <Compile Include="Models\grocery_list.cs" />
     <Compile Include="Models\IdentityModels.cs" />

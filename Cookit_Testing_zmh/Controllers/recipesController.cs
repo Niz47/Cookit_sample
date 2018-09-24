@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Cookit_Testing_zmh.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Cookit_Testing_zmh.Controllers
 {
@@ -17,7 +18,58 @@ namespace Cookit_Testing_zmh.Controllers
         // GET: recipes
         public ActionResult Index()
         {
-            return View(db.recipes.ToList());
+            string username = User.Identity.GetUserName();
+            var recipes = db.recipes.ToList();
+            List<FavouriteRecipeVM> favRecipeVM = new List<FavouriteRecipeVM>();
+            if (!string.IsNullOrEmpty(username))
+            {
+                int userid = db.user_list.Where(x => x.user_email == username).FirstOrDefault().userid;
+
+                foreach (recipe r in recipes)
+                {
+                    FavouriteRecipeVM recipevm = new FavouriteRecipeVM(r);
+                    fav_recipe fav = db.fav_recipe.Where(x => x.fav_recipe_id == r.recipe_id && x.userid == userid).FirstOrDefault();
+                    if (fav != null) recipevm.favourite = true;
+                    favRecipeVM.Add(recipevm);
+                }
+            }
+            else
+            {
+                foreach (recipe r in recipes)
+                {
+                    FavouriteRecipeVM recipevm = new FavouriteRecipeVM(r);
+                    favRecipeVM.Add(recipevm);
+                }
+            }
+
+            return View(favRecipeVM);
+        }
+
+        [HttpPost]
+        public JsonResult Favorite(string recipeid, string action)
+        {
+            string username = User.Identity.GetUserName();
+            int userid = 0;
+            if (!string.IsNullOrEmpty(username)) userid = db.user_list.Where(x => x.user_email == username).FirstOrDefault().userid;
+            if (userid > 0)
+            {
+                int rid = Int32.Parse(recipeid);
+                fav_recipe fav = db.fav_recipe.Where(x => x.userid == userid && x.recipe_id == rid).FirstOrDefault();
+                if (action == "add" && fav == null)
+                {
+                    fav = new fav_recipe();
+                    fav.recipe_id = rid;
+                    fav.userid = userid;
+                    db.fav_recipe.Add(fav);
+                }
+                else if (action == "remove" && fav != null)
+                {
+                    db.fav_recipe.Remove(fav);
+                }
+                db.SaveChanges();
+                return Json("Success");
+            }
+            return Json("Invalid User!");
         }
 
         // GET: recipes/Details/5
