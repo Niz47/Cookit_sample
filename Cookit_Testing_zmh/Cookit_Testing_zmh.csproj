@@ -192,12 +192,32 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\recipesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809240751500_initial.cs" />
+    <Compile Include="Migrations\201809240751500_initial.Designer.cs">
+      <DependentUpon>201809240751500_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809240804580_recipe-all.cs" />
+    <Compile Include="Migrations\201809240804580_recipe-all.Designer.cs">
+      <DependentUpon>201809240804580_recipe-all.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\calorie.cs" />
+    <Compile Include="Models\fav_recipe.cs" />
+    <Compile Include="Models\grocery_list.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ingredient.cs" />
+    <Compile Include="Models\instruction.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\post_ingredient.cs" />
+    <Compile Include="Models\post_instruction.cs" />
+    <Compile Include="Models\post_recipe.cs" />
+    <Compile Include="Models\recipe.cs" />
+    <Compile Include="Models\user_list.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -258,6 +278,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\recipes\Create.cshtml" />
+    <Content Include="Views\recipes\Delete.cshtml" />
+    <Content Include="Views\recipes\Details.cshtml" />
+    <Content Include="Views\recipes\Edit.cshtml" />
+    <Content Include="Views\recipes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -274,6 +299,14 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201809240751500_initial.resx">
+      <DependentUpon>201809240751500_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809240804580_recipe-all.resx">
+      <DependentUpon>201809240804580_recipe-all.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

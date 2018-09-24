@@ -25,6 +25,17 @@ namespace Cookit_Testing_zmh.Models
         {
         }
 
+        public DbSet<user_list> user_list { get; set; }
+        public DbSet<recipe> recipes { get; set; }
+        public DbSet<ingredient> ingredients { get; set; }
+        public DbSet<instruction> instructions { get; set; }
+        public DbSet<post_recipe> post_recipe { get; set; }
+        public DbSet<post_ingredient> post_ingredient { get; set; }
+        public DbSet<post_instruction> post_instruction { get; set; }
+        public DbSet<grocery_list> grocery_list { get; set; }
+        public DbSet<calorie> calories { get; set; }
+        public DbSet<fav_recipe> fav_recipe { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
