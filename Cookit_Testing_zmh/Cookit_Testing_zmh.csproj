@@ -284,6 +284,7 @@
     <Content Include="Views\recipes\Details.cshtml" />
     <Content Include="Views\recipes\Edit.cshtml" />
     <Content Include="Views\recipes\Index.cshtml" />
+    <Content Include="Views\recipes\GrocerySave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

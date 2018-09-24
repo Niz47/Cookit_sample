@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Cookit_Testing_zmh.Models.grocery_list>
+
+@{
+    ViewBag.Title = "GrocerySave";
+}
+<style>
+    .success {
+        border: solid 1px rgb(13,109,0);
+        width: 300px;
+        padding: 5px;
+        background-color: rgb(215,255,218);
+    }
+
+    .failed {
+        border: solid 1px red;
+        width: 300px;
+        padding: 5px;
+        background-color: rgb(255,229,229);
+    }
+</style>
+
+<h2>GrocerySave</h2>
+
+<form name="toDoList">
+    <input type="text" name="grocery_item" id="grocery_item" />
+    <input type="text" name="grocery_amount" id="grocery_amount" />
+</form>
+<div id="Add" class="btn">Add</div>
+<br />
+
+@if (@Model != null)
+{
+    <ol>
+
+        @foreach (var item in Model)
+        {
+        <li id="@item.grocery_id">
+            @Html.DisplayFor(modelItem => item.grocery_item) >> @Html.DisplayFor(modelItem => item.grocery_amount)
+             | <button class="delete">DELETE</button>
+        </li>
+        }
+    </ol>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+
+            $('#Add').click(function (e) {
+                var gg = $('#grocery_item').val();
+                var gg2 = $('#grocery_amount').val();
+                if (gg != "" && gg2 != "") {
+                    var jsonObject = {
+                        "Grocery_item": gg,
+                        "Grocery_amount": gg2
+                    };
+
+                    $.ajax({
+                        url: "@Url.Action("GrocerySave")",
+                        type: "POST",
+                        data: JSON.stringify(jsonObject),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        error: function (response) {
+                            alert(json.stringify(jsonObject));
+                        },
+                        success: function (response) {
+                            alert(response);
+                            var grocery_item = $('input[name=grocery_item]').val();
+                            var grocery_amount = $('input[name=grocery_amount]').val();
+                            $('ol').append('<li id=' + response + '>' + grocery_item + " >> " + grocery_amount + ' | <button class="delete">DELETE</button></li>');
+                            $('#grocery_item').val() = "";
+                            $('#grocery_amount').val() = "";
+                            alert(response);
+                        }
+                    });
+                }
+                else {
+                    alert("The textfield is empty");
+                    return false;
+                }
+            });
+
+            //$("input[name=grocery_amount]").keyup(function (event) {
+            //    if (event.keyCode == 13) {
+            //        $("#Add").click();
+            //    }
+            //});
+
+            $('.delete').click(function () {
+                var gid = $(this).closest('li').attr('id');
+                $.ajax({
+                    url: "@Url.Action("GroceryDelete")",
+                    type: "POST",
+                    data: { groceryid: gid },
+                    error: function (response) {
+                        alert(json.stringify(jsonObject));
+                    },
+                    success: function (response) {
+                        alert(response);
+                    }
+                });
+
+                $(this).closest('li').toggleClass('strike').fadeOut('slow');
+                           
+            });
+
+            $(document).on('dblclick', 'li', function () {
+                var gid = $(this).attr('id');
+                $.ajax({
+                    url: "@Url.Action("GroceryDelete")",
+                    type: "POST",
+                    data: { groceryid: gid },
+                    error: function (response) {
+                        alert(json.stringify(jsonObject));
+                    },
+                    success: function (response) {
+                        alert(response);
+                    }
+                });
+
+                $(this).toggleClass('strike').fadeOut('slow');
+            });
+
+        $('input').focus(function () {
+            $(this).val('');
+        });
+
+            $('ol').sortable();
+    });
+    </script>
+}

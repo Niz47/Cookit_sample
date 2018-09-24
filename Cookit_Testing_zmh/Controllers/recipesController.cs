@@ -72,6 +72,44 @@ namespace Cookit_Testing_zmh.Controllers
             return Json("Invalid User!");
         }
 
+        public ActionResult GrocerySave()
+        {
+            string tmp_name = User.Identity.GetUserName();
+            var userid = db.user_list.Where(x => x.user_email == tmp_name).FirstOrDefault().userid;
+            return View(db.grocery_list.Where(x => x.userid == userid).ToList());
+        }
+        [HttpPost]
+        public ActionResult GrocerySave(grocery_list model)
+        {
+            if (model != null)
+            {
+                db.grocery_list.Add(model);
+                string tmp_name = User.Identity.GetUserName();
+                user_list user = db.user_list.Where(x => x.user_email == tmp_name).FirstOrDefault();
+                model.userid = user.userid;
+                db.SaveChanges();
+                return Json(model.grocery_id);
+            }
+            return Json("An Error Has occoured");
+        }
+
+        [HttpPost]
+        public ActionResult GroceryDelete(string groceryid)
+        {
+            if (!string.IsNullOrEmpty(groceryid))
+            {
+                int gid = Int32.Parse(groceryid);
+                grocery_list glist = db.grocery_list.Where(x => x.grocery_id == gid).FirstOrDefault();
+                if(glist != null)
+                {
+                    db.grocery_list.Remove(glist);
+                    db.SaveChanges();
+                    return Json("Success");
+                }
+            }
+            return Json("An Error Has occoured");
+        }
+
         // GET: recipes/Details/5
         public ActionResult Details(int? id)
         {
